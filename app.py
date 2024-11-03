@@ -230,7 +230,7 @@ preprocessor_cb.fit(X_train, np.log(y_train))
 y_preds = preprocessor_cb.predict(X_valid)
 
 RMLSE_cb = np.sqrt(np.mean((np.log(y_valid) - y_preds) ** 2))
-RMLSE_KAGGLE_cb = 0.12556
+RMLSE_KAGGLE_cb = 0.12511
 R2_cb = 1 - (((y_valid - np.exp(y_preds))**2).sum() / ((y_valid - y_valid.mean())**2).sum())
 
 
@@ -268,7 +268,7 @@ R2_l = 1 - (((y_valid - np.exp(y_preds))**2).sum() / ((y_valid - y_valid.mean())
 
 kaggle_index = test_df['Id']
 
-kaggle_preds = preprocessor_l.predict(test_df)
+kaggle_preds = preprocessor_cb.predict(test_df)
 kaggle_normal = np.exp(kaggle_preds)
 kaggle_pred_df = pd.DataFrame(kaggle_normal, columns=['SalePrice'])
 concat_kaggle_df = pd.concat([kaggle_index, kaggle_pred_df], axis=1)
@@ -294,8 +294,10 @@ table = pd.DataFrame(data, index=['CatBoostRegressor', 'RandomForestRegressor', 
 st.write("### Таблица с метриками и регрессорами")
 
 # Вывод таблицы в Streamlit
-st.dataframe(table)
+st.dataframe(table, width=600, height=300)
+
+st.image('results.png')
 
 
-button_download = st.sidebar.download_button("Сохранить резльтаты", data=csv_data, file_name='submission.csv', mime="text/csv")
+button_download = st.sidebar.download_button("Сохранить результаты лучшей регрессии", data=csv_data, file_name='submission.csv', mime="text/csv")
 
